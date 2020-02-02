@@ -26,3 +26,21 @@ knex.schema.hasTable('products').then((exists) => {
     }
     return console.log('table is created!')
 });
+
+knex.schema.hasTable('product_cart').then((exists) => {
+    if (!exists) {
+        return knex.schema.createTable('product_cart', (table) => {
+            table.increments('product_cart_id')
+            table.string('product_name')
+            table.integer('price')
+            table.integer('quantity')
+            table.string('imported')
+            table.string('category')
+            table.string('quantity_price')
+        })
+        .catch((err) => {
+            console.log(err,"There is some err while writing the quety")
+        })
+    }
+    return console.log('table is created!')
+});
