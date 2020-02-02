@@ -45,4 +45,61 @@ product.get('/get/:product_id',(req,res) => {
     })
 });
 
+// 3
+product.get('/get_data/:product_cart_id',(req,res) => {
+    let product_cart_id = req.params.product_cart_id
+    productDB.get(product_cart_id)
+    .then((data) => {
+    let imported = data[0]["imported"]
+    let category = data[0]["category"]
+    let price = data[0]["price"]
+    if (imported == "not_india"){
+        var tax_price = price * 10/100
+        let data_show = {
+            product_cart_id : data[0]["product_cart_id"],
+            quantity : data[0]["quantity"],
+            product_name : data[0]["product_name"],
+            imported : data[0]["imported"],
+            category : data[0]["category"],
+            price : data[0]["price"],
+            quantity_price : data[0]["quantity_price"],
+            tax : tax_price,
+            price_with_tax : price + tax_price
+        }
+        res.send(data_show)
+    }
+    else if (imported == "india"){
+        if (category == "general"){
+            var tax_amount = price * 5/100
+            let data_show = {
+                product_cart_id : data[0]["product_cart_id"],
+                quantity : data[0]["quantity"],
+                product_name : data[0]["product_name"],
+                imported : data[0]["imported"],
+                category : data[0]["category"],
+                price : data[0]["price"],
+                quantity_price : data[0]["quantity_price"],
+                tax : tax_amount,
+                price_with_tax_ind : price + tax_amount
+            }
+            res.send(data_show)
+        }
+    }
+    else{
+        let data_show = {
+            cart_id : data[0]["cart_id"],
+            quantity : data[0]["quantity"],
+            product_name : data[0]["product_name"],
+            imported : data[0]["imported"],
+            category : data[0]["category"],
+            price : data[0]["price"],
+            quantity_prise : data[0]["quantity_prise"]
+        }
+        res.send(data_show)
+    }
+    }).catch((err) => {
+        res.send(err)
+    })
+});
+
 module.exports = product

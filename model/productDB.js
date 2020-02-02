@@ -14,4 +14,9 @@ let cart = (data_insert) => {
     return knex('product_cart').insert(data_insert)
 }
 
-module.exports = {post,get_data,cart}
+// 3
+let get = (product_cart_id) => {
+    return knex('product_cart').select('*').where('product_cart.product_cart_id',product_cart_id)
+};
+
+module.exports = {post,get_data,cart,get}
